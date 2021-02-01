@@ -1,6 +1,20 @@
-<h1>
-  {{titulo}}
-</h1>
-<ul>
-  <li *ngFor="let func of funcionarios">{{func.nome}}</li>
-</ul>
+<app-titulo [titulo]='titulo'></app-titulo>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Funcionário</th>
+      <th scope="col">RG</th>
+      <th scope="col">Departamento</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let func of funcionarios">
+      <th scope="row">{{func.id}}</th>
+      <td>{{func.nome}}</td>
+      <td>{{func.rg}}</td>
+      <td>{{func.setor}}</td>
+    </tr>
+  </tbody>
+</table>

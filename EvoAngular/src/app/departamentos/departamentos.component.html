@@ -1,6 +1,18 @@
-<h1>
-  {{titulo}}
-</h1>
-<ul>
-  <li *ngFor="let dep of departamentos">{{dep.nome}}</li>
-</ul>
+<app-titulo [titulo]='titulo'></app-titulo>
+
+<table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Departamento</th>
+      <th scope="col">Sigla</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let dep of departamentos">
+      <th scope="row">{{dep.id}}</th>
+      <td>{{dep.nome}}</td>
+      <td>{{dep.sigla}}</td>
+    </tr>
+  </tbody>
+</table>

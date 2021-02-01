@@ -7,6 +7,7 @@ import { Departamento } from './Models/Departamento';
 import { PerfilComponent } from './perfil/perfil.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   { path: 'departamentos', component: DepartamentosComponent},
   { path: 'funcionarios', component: FuncionariosComponent },
   { path: 'dashboard', component: DashboardComponent },
