@@ -1,18 +1,65 @@
-<app-titulo [titulo]='titulo'></app-titulo>
+<div class="row"> 
+  <div class="col-sm-6" *ngIf="departamentoSelecionado">
+    <div class="row">
+      <div class="mr-auto">
+        <app-titulo [titulo]="'Cód: ' + departamentoSelecionado.id"></app-titulo>
+      </div>
+      <div class="mt-2">
+        <button class="btn btn-sm btn-outline-danger" (click)='voltar()'>Fechar</button>
+      </div>
+    </div>
+    
+    <form [formGroup]="departamentoForm" (submit)="departamentoSubmit()">
+      <div class="form-group">
+        <label for="formGroupExampleInput" class="form-label">Nome</label>
+        <input type="text" formControlName= "nome" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="formGroupExampleInput2" class="form-label">Sigla</label>
+        <input type="text" class="form-control" formControlName= "sigla">
+      </div>
+      <button class="btn btn-success" [disabled]="!departamentoForm.valid">Salvar</button>
+    </form>
+  </div>
+  
+  <div [ngClass]="{'col-sm-6': departamentoSelecionado, 'col-sm-12': !departamentoSelecionado}">
+    <app-titulo [titulo]="titulo"></app-titulo>
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Departamento</th>
+          <th scope="col">Sigla</th>
+          <th scope="col">Opções</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let dep of departamentos">
+          <td scope="row">{{dep.id}}</td>
+          <td>{{dep.nome}}</td>
+          <td>{{dep.sigla}}</td>
+          <td>
+            <div class="btn-group">
+              <button (click)="departamentoSelect(dep)" class="text-dark btn btn-sm btn-outline-warning">Detalhe</button>
+              <button class="btn btn-sm btn-outline-primary" (click)="openModal(template)">Funcionários</button>
+              <button class="btn btn-sm btn-outline-danger">Deletar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Departamento</th>
-      <th scope="col">Sigla</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let dep of departamentos">
-      <th scope="row">{{dep.id}}</th>
-      <td>{{dep.nome}}</td>
-      <td>{{dep.sigla}}</td>
-    </tr>
-  </tbody>
-</table>
+
+
+<ng-template #template>  
+  <div class="modal-body">    
+    <app-funcionarios></app-funcionarios>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn pull-right" aria-label="Close" (click)="modalRef.hide()">
+      FECHAR      
+    </button>
+  </div>
+</ng-template>
