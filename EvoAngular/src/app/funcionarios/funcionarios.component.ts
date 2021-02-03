@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Funcionario } from '../Models/Funcionario';
+import { FuncionarioService } from './funcionarios.service';
 
 @Component({
   selector: 'app-funcionarios',
@@ -9,44 +11,51 @@ import { Funcionario } from '../Models/Funcionario';
 })
 export class FuncionariosComponent implements OnInit {
   
+  public modalRef: BsModalRef; 
   public titulo = 'Funcionarios';
   public funcionarioSelecionado: Funcionario;
-  public funcionarioForm: FormGroup;  
+  public funcionarioForm: FormGroup;
+  public funcionarios: Funcionario[];
   
-  constructor(private fbF: FormBuilder) {
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+  
+  constructor(private fb: FormBuilder, private funcionarioService: FuncionarioService, private modalService: BsModalService) {
     this.criarForm();
   }
   
   ngOnInit() {
+    this.carregarFuncionarios();
+  }
+  
+  carregarFuncionarios(){
+    this.funcionarioService.getAll().subscribe(
+      (funcionarios: Funcionario[]) => {this.funcionarios = funcionarios},
+      (erro: any) => {console.error(erro)}
+    );
   }
   
   criarForm(){
-    this.funcionarioForm = this.fbF.group({
+    this.funcionarioForm = this.fb.group({
+      id: [''],
       nome: ['', Validators.required],
+      foto: ['', Validators.required],
       rg: ['', Validators.required],
+      departamentoId: ['', Validators.required],
       departamento: ['', Validators.required]
     });
   }
-  
-  public funcionarios = [
-    { id: 1, nome: 'Lucas', rg: '11.111.111-1', departamento: 'TI' },
-    { id: 2, nome: 'Jéssica', rg: '22.222.222-2', departamento: 'TI' },
-    { id: 3, nome: 'Aihara', rg: '33.333.333-3', departamento: 'TI' },
-    { id: 4, nome: 'Akira', rg: '44.444.444-4', departamento: 'TI' },
-    { id: 5, nome: 'Lucia', rg: '44.444.444-4', departamento: 'TI' },
-    { id: 6, nome: 'Sonia', rg: '44.444.444-4', departamento: 'TI' },
-    { id: 7, nome: 'Anideus', rg: '44.444.444-4', departamento: 'TI' },
-    { id: 8, nome: 'Marco', rg: '33.333.333-3', departamento: 'TI' },
-    { id: 9, nome: 'Valquiria', rg: '33.333.333-3', departamento: 'TI' },
-    { id: 10, nome: 'Murilo', rg: '33.333.333-3', departamento: 'TI' },
-    { id: 11, nome: 'Marcelo', rg: '22.222.222-2', departamento: 'TI' },
-    { id: 12, nome: 'Paulo', rg: '22.222.222-2', departamento: 'TI' },
-    { id: 13, nome: 'Cesar', rg: '22.222.222-2', departamento: 'TI' },
-    { id: 14, nome: 'Conceição', rg: '11.111.111-1', departamento: 'TI' },
-  ];
+
+  salvarFuncionario(funcionario: Funcionario){
+    this.funcionarioService.put(funcionario.id, funcionario).subscribe(
+      (model: Funcionario) => {console.log(model); this.carregarFuncionarios()},
+      (erro: any) => {console.error(erro)}
+    );
+  }
 
   funcionarioSubmit(){
-    console.log(this.funcionarioForm.value);
+    this.salvarFuncionario(this.funcionarioForm.value);
   }
   
   funcionarioSelect(funcionario: Funcionario){
