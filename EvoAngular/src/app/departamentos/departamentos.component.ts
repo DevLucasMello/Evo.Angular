@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Departamento } from '../Models/Departamento';
+import { Funcionario } from '../Models/Funcionario';
 import { DepartamentoService } from './departamento.service';
 
 @Component({
@@ -16,13 +17,15 @@ export class DepartamentosComponent implements OnInit {
   public titulo = 'Departamentos';
   public departamentoSelecionado: Departamento;
   public departamentos: Departamento[];
+  public funcionarios: Funcionario[];
+  public modo = 'post';
  
-  openModal(template: TemplateRef<any>) {
+  openModal(template: TemplateRef<Funcionario>) {    
     this.modalRef = this.modalService.show(template);
   }
   
   constructor( private fb: FormBuilder, private modalService: BsModalService, private departamentoService: DepartamentoService) { 
-    this.criarForm();
+    this.criarForm();    
   }
   
   ngOnInit() {
@@ -45,7 +48,8 @@ export class DepartamentosComponent implements OnInit {
   }
 
   salvarDepartamento(departamento: Departamento){
-    this.departamentoService.put(departamento.id, departamento).subscribe(
+    (departamento.id === 0) ? this.modo = 'post' : this.modo = 'put';
+    this.departamentoService[this.modo](departamento).subscribe(
       (model: Departamento) => {console.log(model); this.carregarDepartamentos()},
       (erro: any) => {console.error(erro)}
     );
@@ -59,8 +63,27 @@ export class DepartamentosComponent implements OnInit {
     this.departamentoSelecionado = departamento;
     this.departamentoForm.patchValue(departamento);
   }
+
+  departamentoNovo(){
+    this.departamentoSelecionado = new Departamento();
+    this.departamentoForm.patchValue(this.departamentoSelecionado);
+  }
   
   voltar(){
     this.departamentoSelecionado = null;
-  }   
+  }
+  
+  deletarDepartamento(id: number){
+    this.departamentoService.delete(id).subscribe(
+      (model: any) => {console.log(model); this.carregarDepartamentos()},
+      (erro: any) => {console.error(erro)}
+    );
+  }
+
+  carregar(departamento: Departamento){
+    this.departamentoService.getByDepartamento(departamento).subscribe(
+      (funcionarios: Funcionario[]) => { this.funcionarios = funcionarios },
+      (erro: any) => { console.error(erro) }
+    );
+  }
 }

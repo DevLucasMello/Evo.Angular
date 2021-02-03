@@ -16,7 +16,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     FuncionariosComponent,
     DepartamentosComponent,
@@ -24,8 +24,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DashboardComponent,
     PerfilComponent,
     NavComponent,
-    TituloComponent
-  ],
+    TituloComponent,      
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,

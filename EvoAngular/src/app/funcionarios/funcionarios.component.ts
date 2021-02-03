@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Funcionario } from '../Models/Funcionario';
@@ -10,60 +10,70 @@ import { FuncionarioService } from './funcionarios.service';
   styleUrls: ['./funcionarios.component.css']
 })
 export class FuncionariosComponent implements OnInit {
-  
-  public modalRef: BsModalRef; 
+
+  public modalRef: BsModalRef;
   public titulo = 'Funcionarios';
   public funcionarioSelecionado: Funcionario;
   public funcionarioForm: FormGroup;
   public funcionarios: Funcionario[];
-  
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
-  }
-  
+  public modo = 'post';
   constructor(private fb: FormBuilder, private funcionarioService: FuncionarioService, private modalService: BsModalService) {
     this.criarForm();
   }
-  
+
   ngOnInit() {
     this.carregarFuncionarios();
   }
-  
-  carregarFuncionarios(){
+
+  carregarFuncionarios() {
     this.funcionarioService.getAll().subscribe(
-      (funcionarios: Funcionario[]) => {this.funcionarios = funcionarios},
-      (erro: any) => {console.error(erro)}
+      (funcionarios: Funcionario[]) => { this.funcionarios = funcionarios },
+      (erro: any) => { console.error(erro) }
     );
   }
-  
-  criarForm(){
+
+  criarForm() {
     this.funcionarioForm = this.fb.group({
       id: [''],
       nome: ['', Validators.required],
       foto: ['', Validators.required],
       rg: ['', Validators.required],
       departamentoId: ['', Validators.required],
-      departamento: ['', Validators.required]
+      departamento: ['']
     });
   }
 
-  salvarFuncionario(funcionario: Funcionario){
-    this.funcionarioService.put(funcionario.id, funcionario).subscribe(
-      (model: Funcionario) => {console.log(model); this.carregarFuncionarios()},
-      (erro: any) => {console.error(erro)}
+  salvarFuncionario(funcionario: Funcionario) {
+    (funcionario.id === 0) ? this.modo = 'post' : this.modo = 'put';
+
+    this.funcionarioService[this.modo](funcionario).subscribe(
+      (model: Funcionario) => { console.log(model); this.carregarFuncionarios() },
+      (erro: any) => { console.error(erro) }
     );
   }
 
-  funcionarioSubmit(){
+  funcionarioSubmit() {
     this.salvarFuncionario(this.funcionarioForm.value);
   }
-  
-  funcionarioSelect(funcionario: Funcionario){
+
+  funcionarioSelect(funcionario: Funcionario) {
     this.funcionarioSelecionado = funcionario;
     this.funcionarioForm.patchValue(funcionario);
   }
-  
-  voltar(){
+
+  funcionarioNovo() {
+    this.funcionarioSelecionado = new Funcionario();
+    this.funcionarioForm.patchValue(this.funcionarioSelecionado);
+  }
+
+  voltar() {
     this.funcionarioSelecionado = null;
-  } 
+  }
+
+  deletarFuncionario(id: number) {
+    this.funcionarioService.delete(id).subscribe(
+      (model: any) => { console.log(model); this.carregarFuncionarios() },
+      (erro: any) => { console.error(erro) }
+    );
+  }
 }

@@ -1,13 +1,8 @@
 <div class="row">
   <div class="col-sm-6" *ngIf="funcionarioSelecionado">
-    <div class="row">
-      <div class="mr-auto">
-        <app-titulo [titulo]="'Cód: ' + funcionarioSelecionado.id"></app-titulo>
-      </div>
-      <div class="mt-2">
-        <button class="btn btn-sm btn-outline-danger" (click)='voltar()'>Fechar</button>
-      </div>
-    </div>
+    <app-titulo [titulo]="(funcionarioSelecionado.id === 0 ? 'Funcionario Novo' : 'Cód: ' + funcionarioSelecionado.id)">
+      <button class="btn btn-sm btn-outline-danger" (click)='voltar()'>Fechar</button>
+    </app-titulo> 
     
     <form [formGroup]='funcionarioForm' (submit)="funcionarioSubmit()">
       <div class="form-group">
@@ -24,7 +19,7 @@
       </div>
       <div class="form-group">
         <label for="formGroupExampleInput2" class="form-label">Departamento Id</label>
-        <input type="text" class="form-control" formControlName= "departamentoId">
+        <input type="number" class="form-control" formControlName= "departamentoId">
       </div>
       <div class="form-group">
         <label for="formGroupExampleInput2" class="form-label">Departamento</label>
@@ -38,7 +33,9 @@
   </div>
   
   <div [ngClass]="{'col-sm-6': funcionarioSelecionado, 'col-sm-12': !funcionarioSelecionado}">
-    <app-titulo [titulo]="titulo"></app-titulo>
+    <app-titulo [titulo]="titulo">
+      <button class="btn btn-sm btn-success" (click)='funcionarioNovo()'>Cadastrar Funcionário</button>
+    </app-titulo>
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
@@ -58,8 +55,8 @@
           <td>{{func.departamento.nome}}</td>
           <td>{{func.departamentoId}}</td>
           <div class="btn-group">
-            <button (click)="funcionarioSelect(func)" class="text-dark btn btn-sm btn-outline-warning">Detalhe</button>            
-            <button class="btn btn-sm btn-outline-danger">Deletar</button>
+            <button (click)="funcionarioSelect(func)" class="text-dark btn btn-sm btn-outline-warning">Detalhe</button>&nbsp;            
+            <button (click) ='deletarFuncionario(func.id)' class="btn btn-sm btn-outline-danger">Deletar</button>
           </div>
         </tr>
       </tbody>

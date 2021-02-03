@@ -22,11 +22,11 @@ getById(id: number): Observable<Funcionario>{
 }
 
 post(funcionario: Funcionario){
-  return this.http.post(`${this.baseUrl}`, Funcionario);
+  return this.http.post(`${this.baseUrl}`, funcionario);
 }
 
-put(id: number, funcionario: Funcionario){
-  return this.http.put(`${this.baseUrl}/${id}`, funcionario);
+put(funcionario: Funcionario){
+  return this.http.put(`${this.baseUrl}/${funcionario.id}`, funcionario);
 }
 
 delete(id: number){

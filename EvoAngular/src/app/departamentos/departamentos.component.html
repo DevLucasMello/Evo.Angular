@@ -1,13 +1,8 @@
-<div class="row"> 
+<div class="row">
   <div class="col-sm-6" *ngIf="departamentoSelecionado">
-    <div class="row">
-      <div class="mr-auto">
-        <app-titulo [titulo]="'Cód: ' + departamentoSelecionado.id"></app-titulo>
-      </div>
-      <div class="mt-2">
-        <button class="btn btn-sm btn-outline-danger" (click)='voltar()'>Fechar</button>
-      </div>
-    </div>
+    <app-titulo [titulo]="(departamentoSelecionado.id === 0 ? 'Departamento Novo' : 'Cód: ' + departamentoSelecionado.id)">
+      <button class="btn btn-sm btn-outline-danger" (click)='voltar()'>Fechar</button>
+    </app-titulo>
     
     <form [formGroup]="departamentoForm" (submit)="departamentoSubmit()">
       <div class="form-group">
@@ -21,9 +16,11 @@
       <button class="btn btn-success" [disabled]="!departamentoForm.valid">Salvar</button>
     </form>
   </div>
-  
+
   <div [ngClass]="{'col-sm-6': departamentoSelecionado, 'col-sm-12': !departamentoSelecionado}">
-    <app-titulo [titulo]="titulo"></app-titulo>
+    <app-titulo [titulo]="titulo">
+      <button class="btn btn-sm btn-success" (click)='departamentoNovo()'>Cadastrar Departamento</button>
+    </app-titulo>
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
@@ -40,9 +37,10 @@
           <td>{{dep.sigla}}</td>
           <td>
             <div class="btn-group">
-              <button (click)="departamentoSelect(dep)" class="text-dark btn btn-sm btn-outline-warning">Detalhe</button>
-              <button class="btn btn-sm btn-outline-primary" (click)="openModal(template)">Funcionários</button>
-              <button class="btn btn-sm btn-outline-danger">Deletar</button>
+              <button (click)="departamentoSelect(dep)" class="text-dark btn btn-sm btn-outline-warning">Detalhe</button>&nbsp;
+              <button class="btn btn-sm btn-outline-primary" (click)='openModal(template)'>Funcionários</button>&nbsp;
+              <button (click)='carregar(dep)' class="btn btn-sm btn-outline-primary">Carregar</button>&nbsp;
+              <button (click) ='deletarDepartamento(dep.id)' class="btn btn-sm btn-outline-danger">Deletar</button>&nbsp;
             </div>
           </td>
         </tr>
@@ -50,8 +48,6 @@
     </table>
   </div>
 </div>
-
-
 
 <ng-template #template>  
   <div class="modal-body">    

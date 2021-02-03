@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  public titulo = 'Principal';
+  public titulo = 'Home Page';
 
   constructor() { }
 
