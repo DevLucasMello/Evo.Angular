@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Funcionario } from '../Models/Funcionario';
 import { FuncionarioService } from './funcionarios.service';
 
@@ -13,11 +13,11 @@ export class FuncionariosComponent implements OnInit {
 
   public modalRef: BsModalRef;
   public titulo = 'Funcionarios';
-  public funcionarioSelecionado: Funcionario;
+  public funcionarioSelecionado: Funcionario;  
   public funcionarioForm: FormGroup;
   public funcionarios: Funcionario[];
   public modo = 'post';
-  constructor(private fb: FormBuilder, private funcionarioService: FuncionarioService, private modalService: BsModalService) {
+  constructor(private fb: FormBuilder, private funcionarioService: FuncionarioService) {
     this.criarForm();
   }
 
@@ -38,8 +38,7 @@ export class FuncionariosComponent implements OnInit {
       nome: ['', Validators.required],
       foto: ['', Validators.required],
       rg: ['', Validators.required],
-      departamentoId: ['', Validators.required],
-      departamento: ['']
+      departamentoId: ['', Validators.required]
     });
   }
 
