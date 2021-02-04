@@ -23,8 +23,8 @@ getById(id: number): Observable<Departamento>{
   return this.http.get<Departamento>(`${this.baseUrl}/${id}`);
 }
 
-getByDepartamento(departamento: Departamento): Observable<Funcionario[]>{
-  return this.http.get<Funcionario[]>(`${this.Url}/${departamento.id}`);
+getByDepartamento(id: number): Observable<Funcionario[]>{
+  return this.http.get<Funcionario[]>(`${this.Url}/${id}`);
 }
 
 post(departamento: Departamento){
